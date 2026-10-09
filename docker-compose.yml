@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: devpilot-postgres
+
+    environment:
+      POSTGRES_DB: user_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "12345"
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - devpilot_pg_data:/var/lib/postgresql/data
+      - ./docker/postgres/init-extensions.sql:/docker-entrypoint-initdb.d/01-extensions.sql:ro
+
+    restart: unless-stopped
+
+volumes:
+  devpilot_pg_data:
+    name: devpilot_pg_data
+    driver: local
